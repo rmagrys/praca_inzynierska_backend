@@ -1,0 +1,20 @@
+{
+  "app": {
+    "port": 3000,
+    "name": "expressjs"
+  },
+  "secutiry": {
+    "secret": "SUPER_SECRET_KEY",
+    "hashingRounds": 10
+  },
+  "mongodb": {
+    "host": "localhost",
+    "port": 27017,
+    "name": "expressjs",
+    "dropSchema": false,
+    "loggerActive": true
+  },
+  "logger": {
+    "loggerActive": true
+  }
+}

@@ -1,7 +1,9 @@
+import { Type } from "class-transformer";
 import { IsEmail, Length, validateOrReject } from "class-validator";
+import { Animal } from "../entity/Animal";
 
 export class UserDto {
-  id: string;
+  id: number;
 
   @IsEmail()
   email: string;
@@ -13,6 +15,9 @@ export class UserDto {
 
   @Length(2, 70)
   lastName: string;
+
+  @Type(() => Animal)
+  animals: Animal[];
 
   async validate() {
     await validateOrReject(this);

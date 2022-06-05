@@ -5,10 +5,9 @@ export class UserDtoConverter {
   public static toDto(user: User): UserDto {
     const newUserDto = new UserDto();
 
-    newUserDto.id = user.id ? user.id.toHexString() : "";
+    newUserDto.id = user.id ? user.id : 0;
     newUserDto.email = user.email;
     newUserDto.firstName = user.firstName;
-    newUserDto.lastName = user.lastName;
     return newUserDto;
   }
 
@@ -18,6 +17,7 @@ export class UserDtoConverter {
     newUser.email = userDto.email;
     newUser.firstName = userDto.firstName;
     newUser.lastName = userDto.lastName;
+    newUser.password = userDto.password;
 
     return newUser;
   }

@@ -3,17 +3,21 @@ import * as config from "config";
 
 export class DatabaseConfig {
   public static getDatabaseConnectionConfiguration(): ConnectionOptions {
-    const host = config.get("mongodb.host");
-    const port = config.get("mongodb.port");
-    const name = config.get("mongodb.name");
-    const dropSchema = config.get("mongodb.dropSchema");
+    const host = config.get("mysql.host");
+    const port = config.get("mysql.port");
+    const name = config.get("mysql.name");
+    const dropSchema = config.get("mysql.dropSchema");
+    const username = config.get("mysql.login");
+    const password = config.get("mysql.password");
 
     return <ConnectionOptions>{
-      type: "mongodb",
+      type: "mysql",
       host: host,
       port: port,
       database: name,
       dropSchema: dropSchema,
+      username: username,
+      password: password,
       synchronize: true,
       logging: true,
       entities: ["src/entity/**/*.ts"],

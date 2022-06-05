@@ -1,23 +1,21 @@
-version: "3.1"
+version: "3.3"
 
 services:
   postgresDB:
-    image: postgres
-    container_name: postgres-db
+    image: mysql
+    container_name: mysql-db
     restart: always
+    command: --default-authentication-plugin=mysql_native_password
     environment:
-      POSTGRES_PASSWORD: example
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_USER: 'root'
+      MYSQL_ROOT_PASSWORD: 'root'
     ports: 
-      - 5432:5432
+      - 3306:3306
 
-  mongoDB:
-    image: mongo
-    container_name: mongo-db
-    environment:
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - /home/barry/mongodb/database:/data/db
+  adminer:
+    image: adminer
+    restart: always
     ports:
-      - 27017:27017
-    restart: unless-stopped
+      - 8080:8080

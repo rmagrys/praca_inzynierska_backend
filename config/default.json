@@ -3,14 +3,16 @@
     "port": 3000,
     "name": "expressjs"
   },
-  "secutiry": {
+  "security": {
     "secret": "SUPER_SECRET_KEY",
     "hashingRounds": 10
   },
-  "mongodb": {
+  "mysql": {
     "host": "localhost",
-    "port": 27017,
-    "name": "expressjs",
+    "port": 3306,
+    "name": "app",
+    "login": "root",
+    "password": "root",
     "dropSchema": false,
     "loggerActive": true
   },

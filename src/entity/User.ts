@@ -1,17 +1,20 @@
 import { IsDefined, IsEmail, Length, validateOrReject } from "class-validator";
 import {
-  Entity,
-  Column,
-  ObjectID,
-  ObjectIdColumn,
   BeforeInsert,
   BeforeUpdate,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
 } from "typeorm";
+import { Auction } from "./Auction";
+import { Bid } from "./Bid";
+import { Payment } from "./Payment";
 
 @Entity()
 export class User {
-  @ObjectIdColumn()
-  id: ObjectID;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   @IsEmail()
@@ -29,6 +32,28 @@ export class User {
   @IsDefined()
   @Length(2, 70)
   lastName: string;
+
+  @Column({ type: "timestamp" })
+  createdAt: Date;
+
+  @Column()
+  @Length(5, 20)
+  phone: number;
+
+  @OneToMany(() => Payment, (payment) => payment.buyer, {
+    cascade: ["insert", "update"],
+  })
+  payments?: Payment[];
+
+  @OneToMany(() => Auction, (auction) => auction.seller, {
+    cascade: ["insert", "update"],
+  })
+  auctions?: Auction[];
+
+  @OneToMany(() => Bid, (bid) => bid.buyer, {
+    cascade: ["insert", "update"],
+  })
+  bids?: Bid[];
 
   @BeforeInsert()
   @BeforeUpdate()

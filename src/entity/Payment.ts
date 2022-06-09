@@ -35,7 +35,7 @@ export class Payment {
   buyer?: User;
 
   @OneToOne(() => Auction, (auction) => auction.payment) // specify inverse side as a second parameter
-  @JoinColumn()
+  @JoinColumn({ name: "auction_id" })
   auction?: Auction;
 
   @BeforeInsert()

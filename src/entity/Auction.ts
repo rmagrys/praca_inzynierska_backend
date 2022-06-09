@@ -12,9 +12,10 @@ import {
   OneToOne,
 } from "typeorm";
 import { User } from "./User";
-import { AuctionProduct } from "./AuctionProduct";
+import { Product } from "./Product";
 import { Bid } from "./Bid";
 import { Payment } from "./Payment";
+import { Picture } from "./Picture";
 
 @Entity()
 export class Auction {
@@ -22,49 +23,51 @@ export class Auction {
   id: number;
 
   @Column()
-  @Length(2, 50)
   price: number;
 
-  @Column()
-  @Length(2, 50)
-  description: string;
-
-  @Column()
+  @Column({ nullable: true })
   priceDrop: number;
 
-  @Column()
+  @Column({ nullable: true })
   minimumPrice: number;
 
   @Column()
   auctionType: AuctionType;
 
-  @Column({ type: "timestamp" })
+  @Column({ type: "timestamp", nullable: true })
   completionDate: Date;
 
-  @Column({ type: "timestamp" })
+  @Column({ type: "timestamp", nullable: true })
   intervalTime: Date;
 
   @Column({ type: "timestamp" })
   createdAt: Date;
 
   @ManyToOne(() => User, (user) => user.auctions, {
-    cascade: ["insert", "update"],
+    cascade: true,
   })
   @JoinColumn({ name: "user_id" })
   seller?: User;
 
-  @OneToMany(() => AuctionProduct, (auctionProduct) => auctionProduct.auction, {
-    cascade: ["insert", "update"],
+  @OneToOne(() => Product, (Product) => Product.auction, {
+    cascade: true,
   })
-  auctionsProducts?: AuctionProduct[];
+  @JoinColumn({ name: "product_id" })
+  product?: Product;
 
   @OneToMany(() => Bid, (bid) => bid.auction, {
-    cascade: ["insert", "update"],
+    cascade: true,
   })
   bids?: Bid[];
 
-  @OneToOne(() => Payment, (payment) => payment.auction) // specify inverse side as a second parameter
-  payment: Payment;
+  @OneToMany(() => Picture, (picture) => picture.auction, {
+    cascade: true,
+  })
+  pictures?: Picture[];
+
+  @OneToOne(() => Payment, (payment) => payment.auction)
+  @JoinColumn({ name: "payment_id" })
+  payment?: Payment;
 
   @BeforeInsert()
   @BeforeUpdate()

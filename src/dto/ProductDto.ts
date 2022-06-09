@@ -1,6 +1,6 @@
 import { Length, validateOrReject } from "class-validator";
 
-import { AuctionProductDto } from "./AuctionProductDto";
+import { AuctionDto } from "./AuctionDto";
 import { CategoryDto } from "./CategoryDto";
 
 export class ProductDto {
@@ -16,7 +16,7 @@ export class ProductDto {
 
   category: CategoryDto;
 
-  auctionsProducts: AuctionProductDto[];
+  auction: AuctionDto;
 
   async validate() {
     await validateOrReject(this);

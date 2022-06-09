@@ -7,9 +7,9 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
-  OneToMany,
+  OneToOne,
 } from "typeorm";
-import { AuctionProduct } from "./AuctionProduct";
+import { Auction } from "./Auction";
 import { Category } from "./Category";
 
 @Entity()
@@ -34,10 +34,9 @@ export class Product {
   @JoinColumn({ name: "category_id" })
   category?: Category;
 
-  @OneToMany(() => AuctionProduct, (auctionProduct) => auctionProduct.auction, {
-    cascade: ["insert", "update"],
-  })
-  auctionsProducts?: AuctionProduct[];
+  @OneToOne(() => Auction, (auction) => auction.product)
+  @JoinColumn({ name: "auction_id" })
+  auction?: Auction;
 
   @BeforeInsert()
   @BeforeUpdate()

@@ -33,6 +33,9 @@ export class Application {
           controllers: [__dirname + "./../controller/*.ts"],
           middlewares: [__dirname + "./../middleware/*.ts"],
           defaultErrorHandler: false,
+          cors: {
+            origin: "*",
+          },
         });
 
         this.appContext = app.listen(port, () => {
@@ -40,7 +43,7 @@ export class Application {
         });
       })
       .catch((error) => {
-        Logger.log(`TypeORM connection error: ${error}`, LoggerLevel.ERROR);
+        console.log(error);
       });
   }
 

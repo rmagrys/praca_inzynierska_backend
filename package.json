@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.1151.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.1",
     "chai": "^4.3.4",
@@ -22,6 +23,7 @@
     "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
     "config": "^3.3.6",
+    "cors": "^2.8.5",
     "express": "^4.17.2",
     "http-status-codes": "^2.2.0",
     "jsonwebtoken": "^8.5.1",

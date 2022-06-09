@@ -1,6 +1,7 @@
 import {Body, Delete, Get, HttpCode, JsonController, NotFoundError, Param, Patch, Post,} from "routing-controllers";
 import {Service} from "typedi";
 import {DeleteResult} from "typeorm";
+import { AuctionDtoConverter } from "../dto-converter/AuctionDtoConverter";
 import {UserDtoConverter} from "../dto-converter/UserDtoConverter";
 import {UserDto} from "../dto/UserDto";
 import {User} from "../entity/User";
@@ -34,7 +35,7 @@ export class UserController {
     @Body({ validate: true }) userDto: UserDto
   ): Promise<UserDto> {
     const user: User = UserDtoConverter.toEntity(userDto);
-
+    
     return await this.userService
       .saveUser(user)
       .then((user: User) => UserDtoConverter.toDto(user));

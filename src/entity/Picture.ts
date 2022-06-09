@@ -4,23 +4,26 @@ import {
   BeforeUpdate,
   Column,
   Entity,
-  JoinColumn,
-  ManyToOne,
   PrimaryGeneratedColumn,
+  ManyToOne,
 } from "typeorm";
+import { Auction } from "./Auction";
 
 @Entity()
-export class Animal {
+export class Picture {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  @Length(2, 50)
-  name: string;
+  url: string;
 
-  @Column()
-  @Length(2, 50)
-  species: string;
+  @Column({ type: "timestamp" })
+  createdAt: Date;
+
+  @ManyToOne(() => Auction, (auction) => auction.pictures, {
+    cascade: ["insert", "update"],
+  })
+  auction: Auction;
 
   @BeforeInsert()
   @BeforeUpdate()

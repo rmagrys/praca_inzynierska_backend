@@ -12,10 +12,10 @@ export class RequestLogMiddleware implements ExpressMiddlewareInterface {
 
     if (isLoggerActive) {
       try {
+        await next();
         Logger.log(
           `${context.method} ${context.url} | ${context.status} ${context.message}`
         );
-        await next();
       } catch (error) {
         Logger.log(`Error: ${error}`, LoggerLevel.WARN);
       }

@@ -11,6 +11,8 @@ import * as config from "config";
 import { Logger } from "./Logger";
 import { LoggerLevel } from "../enum/LoggerLevel";
 import { InjectConnection } from "typeorm-typedi-extensions";
+import { User } from "../entity/User";
+import { SecurityChecker } from "../security/SecurityChecker";
 
 export class Application {
   @InjectConnection()
@@ -33,6 +35,17 @@ export class Application {
           controllers: [__dirname + "./../controller/*.ts"],
           middlewares: [__dirname + "./../middleware/*.ts"],
           defaultErrorHandler: false,
+          authorizationChecker: async (action: Action) => {
+            const userFromToken: User =
+              await SecurityChecker.findUserFromAction(action, connection);
+            action.context.state.actionUser = userFromToken;
+            return userFromToken ? !!userFromToken : false;
+          },
+          currentUserChecker: async (action: Action) => {
+            return action.context.state.actionUser
+              ? action.context.state.actionUser
+              : await SecurityChecker.findUserFromAction(action, connection);
+          },
           cors: {
             origin: "*",
           },

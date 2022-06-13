@@ -38,7 +38,10 @@ export class User {
 
   @Column()
   @Length(5, 20)
-  phone: number;
+  phone: string;
+
+  @Length(2, 50)
+  nickname: string;
 
   @OneToMany(() => Payment, (payment) => payment.buyer, {
     cascade: ["insert", "update"],

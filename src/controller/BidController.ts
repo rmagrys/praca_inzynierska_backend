@@ -18,7 +18,7 @@ export class BidController {
   async getAllUserBidsWithIncludables(
     @Param("userId") userId: string
   ): Promise<Bid[]> {
-    return this.bidService
+    return await this.bidService
       .getAllUserBidsWithIncludables(userId)
       .then((bids: Bid[]) =>
         BidDtoConverter.bidsListToDtosWithIncludables(bids)

@@ -7,13 +7,17 @@ export class UserDto {
   id: number;
 
   @IsEmail()
+  @Length(2, 50)
   email: string;
 
+  @IsDefined()
   password: string;
 
-  @IsDefined()
   @Length(2, 50)
   firstName: string;
+
+  @Length(2, 50)
+  nickname: string;
 
   @IsDefined()
   @Length(2, 70)
@@ -22,13 +26,13 @@ export class UserDto {
   createdAt: Date;
 
   @Length(5, 20)
-  phone: number;
+  phone: string;
 
-  payments: PaymentDto[];
+  payments?: PaymentDto[];
 
-  auctions: AuctionDto[];
+  auctions?: AuctionDto[];
 
-  bids: BidDto[];
+  bids?: BidDto[];
 
   async validate() {
     await validateOrReject(this);

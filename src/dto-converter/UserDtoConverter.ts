@@ -11,9 +11,7 @@ export class UserDtoConverter {
     newUserDto.lastName = user.firstName;
     newUserDto.createdAt = user.createdAt;
     newUserDto.phone = user.phone;
-    // newUserDto.payments = user.payments;
-    // newUserDto.auctions = user.auctions;
-    // newUserDto.bids = user.bids;
+    newUserDto.nickname = user.nickname;
 
     return newUserDto;
   }
@@ -26,9 +24,8 @@ export class UserDtoConverter {
     newUser.lastName = userDto.firstName;
     newUser.createdAt = userDto.createdAt;
     newUser.phone = userDto.phone;
-    // newUser.payments = userDto.payments;
-    // newUser.auctions = userDto.auctions;
-    // newUser.bids = userDto.bids;
+    newUser.password = userDto.password;
+    newUser.nickname = userDto.nickname;
 
     return newUser;
   }

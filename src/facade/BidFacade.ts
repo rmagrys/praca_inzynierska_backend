@@ -14,7 +14,7 @@ export class BidFacade {
       auctionId
     );
     if (highestBid.value > bid.value) {
-      throw new Error("cant add bid, there is auction wirh higher value");
+      throw new Error("cant add bid, there is auction with higher value");
     }
 
     const auction = await this.auctionService.findOneAuction(auctionId);

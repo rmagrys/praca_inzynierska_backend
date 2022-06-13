@@ -4,6 +4,7 @@ import { ProductDto } from "./ProductDto";
 import { BidDto } from "./BidDto";
 import { PaymentDto } from "./PaymentDto";
 import { PictureDto } from "./PictureDto";
+import { validateOrReject } from "class-validator";
 
 export class AuctionDto {
   id: number;
@@ -19,4 +20,8 @@ export class AuctionDto {
   bids?: BidDto[];
   payment?: PaymentDto;
   pictures?: PictureDto[];
+
+  async validate() {
+    await validateOrReject(this);
+  }
 }

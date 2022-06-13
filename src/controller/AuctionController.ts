@@ -46,7 +46,7 @@ export class AuctionController {
   }
 
   @Get("/:id")
-  public async getCategoryById(@Param("id") id: string): Promise<AuctionDto> {
+  public async getAyctionById(@Param("id") id: string): Promise<AuctionDto> {
     return this.auctionService
       .getAuctionByIdWithIncludables(id)
       .then((auction: Auction) =>
@@ -65,5 +65,34 @@ export class AuctionController {
     return await this.auctionFacade
       .addNewAuction(newAuctionDto, id)
       .then((auction: Auction) => AuctionDtoConverter.toDto(auction));
+  }
+
+  @Get("/user/:id")
+  public async getAllUserAuctionsWithIncludables(
+    @Param("id") userId: string,
+    @QueryParam("auction-type") auctionType?: AuctionType
+  ): Promise<AuctionDto[]> {
+    return await this.auctionService
+      .getAllUserAuctionsWithIncludables(userId, auctionType)
+      .then((auctions: Auction[]) =>
+        AuctionDtoConverter.auctionsListToDtosWithIncludables(auctions)
+      );
+  }
+
+  @Get("/category/:categoryId/user/:userId")
+  public async getAllUserAuctionsWithIncludablesByCategory(
+    @Param("categoryId") categoryId: string,
+    @Param("userId") userId: string,
+    @QueryParam("auction-type") auctionType?: AuctionType
+  ): Promise<AuctionDto[]> {
+    return await this.auctionService
+      .getAllUserAuctionsWithIncludablesByCategory(
+        userId,
+        categoryId,
+        auctionType
+      )
+      .then((auctions: Auction[]) =>
+        AuctionDtoConverter.auctionsListToDtosWithIncludables(auctions)
+      );
   }
 }

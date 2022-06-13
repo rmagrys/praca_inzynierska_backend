@@ -1,5 +1,7 @@
 import { BidDto } from "../dto/BidDto";
 import { Bid } from "../entity/Bid";
+import { AuctionDtoConverter } from "./AuctionDtoConverter";
+import { UserDtoConverter } from "./UserDtoConverter";
 
 export class BidDtoConverter {
   public static toDto(bid: Bid): BidDto {
@@ -27,7 +29,26 @@ export class BidDtoConverter {
     return newBid;
   }
 
+  public static toDtoWithIncludables(bid: Bid): BidDto {
+    const bidDto = new BidDto();
+
+    bidDto.id = bid.id ? bid.id : 0;
+    bidDto.value = bid.value;
+    bidDto.description = bid.description;
+    bidDto.createdAt = bid.createdAt;
+    bidDto.buyer = bid.buyer ? UserDtoConverter.toDto(bid.buyer) : null;
+    bidDto.auction = bid.auction
+      ? AuctionDtoConverter.toDto(bid.auction)
+      : null;
+
+    return bidDto;
+  }
+
   public static bidsListToDtos(bids: Bid[]): BidDto[] {
     return bids.map((bid) => this.toDto(bid));
+  }
+
+  public static bidsListToDtosWithIncludables(bids: Bid[]): BidDto[] {
+    return bids.map((bid) => this.toDtoWithIncludables(bid));
   }
 }

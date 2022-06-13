@@ -14,7 +14,7 @@ import { CategoryService } from "../service/CategoryService";
 
 @Service()
 @JsonController("/api/categories")
-export class AnimalController {
+export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()

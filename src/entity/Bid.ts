@@ -17,7 +17,6 @@ export class Bid {
   id: number;
 
   @Column()
-  @Length(2, 50)
   value: number;
 
   @Column()

@@ -22,6 +22,7 @@ export class AuctionService {
       .leftJoinAndSelect("auction.seller", "user")
       .leftJoinAndSelect("auction.product", "product")
       .leftJoinAndSelect("auction.pictures", "picture")
+      .leftJoinAndSelect("auction.bids", "bid")
       .where("auction.id = :id", { id })
       .getOneOrFail();
   }
@@ -34,6 +35,7 @@ export class AuctionService {
       .leftJoinAndSelect("auction.seller", "user")
       .leftJoinAndSelect("auction.product", "product")
       .leftJoinAndSelect("auction.pictures", "picture")
+      .leftJoinAndSelect("auction.bids", "bid")
       .getMany();
   }
 
@@ -48,6 +50,7 @@ export class AuctionService {
       .leftJoinAndSelect("auction.seller", "user")
       .leftJoinAndSelect("auction.product", "product")
       .leftJoinAndSelect("auction.pictures", "picture")
+      .leftJoinAndSelect("auction.bids", "bid")
       .where("product.category_id = :categoryId", { categoryId })
       .andWhere("auction.auctionType = :auctionType", { auctionType })
       .getMany();
@@ -66,6 +69,7 @@ export class AuctionService {
       .leftJoinAndSelect("auction.seller", "user")
       .leftJoinAndSelect("auction.product", "product")
       .leftJoinAndSelect("auction.pictures", "picture")
+      .leftJoinAndSelect("auction.bids", "bid")
       .where("auction.user_id = :userId", { userId })
       .andWhere("auction.auctionType = :auctionType", { auctionType })
       .getMany();
@@ -83,6 +87,7 @@ export class AuctionService {
       .leftJoinAndSelect("auction.seller", "user")
       .leftJoinAndSelect("auction.product", "product")
       .leftJoinAndSelect("auction.pictures", "picture")
+      .leftJoinAndSelect("auction.bids", "bid")
       .where("auction.user_id = :userId", { userId })
       .andWhere("product.category_id = :categoryId", { categoryId })
       .andWhere("auction.auctionType = :auctionType", { auctionType })

@@ -6,7 +6,6 @@ import { UserDto } from "./UserDto";
 export class BidDto {
   id: number;
 
-  @Length(2, 50)
   value: number;
 
   @Length(2, 50)

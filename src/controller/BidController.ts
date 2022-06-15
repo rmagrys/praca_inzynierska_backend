@@ -1,10 +1,18 @@
-import { Body, Get, JsonController, Param, Post } from "routing-controllers";
+import {
+  Body,
+  Get,
+  JsonController,
+  Param,
+  Post,
+  QueryParam,
+} from "routing-controllers";
 import { Service } from "typedi";
 import { BidDtoConverter } from "../dto-converter/BidsDtoConverter";
 import { BidDto } from "../dto/BidDto";
 import { Bid } from "../entity/Bid";
 import { BidService } from "../service/BidService";
 import { BidFacade } from "../facade/BidFacade";
+import { AuctionType } from "../enum/AuctionType";
 
 @Service()
 @JsonController("/api/bid")
@@ -25,6 +33,23 @@ export class BidController {
       );
   }
 
+  @Get("/user/:userId/category/:categoryId")
+  async getAllUserBidsWithIncludablesByCategoryAndAuctionType(
+    @Param("userId") userId: string,
+    @Param("categoryId") categoryId: string,
+    @QueryParam("auction-type") auctionType: AuctionType
+  ): Promise<Bid[]> {
+    return await this.bidService
+      .getAllUserBidsWithIncludablesByCategoryAndAuctionType(
+        userId,
+        categoryId,
+        auctionType
+      )
+      .then((bids: Bid[]) =>
+        BidDtoConverter.bidsListToDtosWithIncludables(bids)
+      );
+  }
+
   @Post("/user/:userId/auction/:auctionId")
   async addNewBidToAuction(
     @Param("userId") userId: string,
@@ -32,6 +57,7 @@ export class BidController {
     @Body({ validate: true }) bidDto: BidDto
   ) {
     const newBid = BidDtoConverter.toEntity(bidDto);
+    console.log(newBid);
 
     return this.bidFacade.saveNewBid(newBid, userId, auctionId);
   }

@@ -1,7 +1,10 @@
+import { Service } from "typedi";
 import { InjectRepository } from "typeorm-typedi-extensions";
 import { Bid } from "../entity/Bid";
+import { AuctionType } from "../enum/AuctionType";
 import { BidRepository } from "../repository/BidRepository";
 
+@Service()
 export class BidService {
   constructor(
     @InjectRepository() private readonly bidRepository: BidRepository
@@ -15,10 +18,29 @@ export class BidService {
   async findHighestBidForAuction(auctionId: string): Promise<Bid> {
     return this.bidRepository
       .createQueryBuilder()
-      .select('MAX("bid.value")', "bid")
+      .select("bid")
       .from(Bid, "bid")
-      .where("auction.id = :auctionId", { auctionId })
-      .getOneOrFail();
+      .where("bid.auction_id = :auctionId", { auctionId })
+      .orderBy("bid.value", "DESC")
+      .getOne();
+  }
+
+  async getAllUserBidsWithIncludablesByCategoryAndAuctionType(
+    userId: string,
+    categoryId: string,
+    auctionType: AuctionType
+  ): Promise<Bid[]> {
+    return this.bidRepository
+      .createQueryBuilder()
+      .select("bid")
+      .from(Bid, "bid")
+      .innerJoinAndSelect("bid.auction", "auction")
+      .innerJoinAndSelect("auction.product", "product")
+      .innerJoinAndSelect("product.category", "category")
+      .where("category.id = :categoryId", { categoryId })
+      .andWhere("bid.buyer_id = :userId", { userId })
+      .andWhere("auction.auctionType = : auctionType", { auctionType })
+      .getMany();
   }
 
   async getAllUserBidsWithIncludables(userId: string): Promise<Bid[]> {

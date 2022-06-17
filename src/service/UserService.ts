@@ -1,5 +1,5 @@
 import { sign } from "jsonwebtoken";
-import { NotFoundError } from "routing-controllers";
+import { BadRequestError, NotFoundError } from "routing-controllers";
 import { Service } from "typedi";
 import { DeleteResult } from "typeorm";
 import { InjectRepository } from "typeorm-typedi-extensions";
@@ -28,7 +28,7 @@ export class UserService {
       (await this.userRepository.findUserByEmail(user.email)) !== undefined;
 
     if (userExists) {
-      throw new Error("user with this email already exist");
+      throw new BadRequestError("Ten email już istnieje");
     } else {
       console.log(user);
       user.password = await PasswordHashing.hashPassword(user.password);
@@ -52,11 +52,11 @@ export class UserService {
 
           return sign(Object.assign({}, tokenBody), applicationSecret);
         } else {
-          throw new Error("Login failed");
+          throw new BadRequestError("Nie udało się zalogować");
         }
       })
       .catch(() => {
-        throw new Error("Login failed");
+        throw new BadRequestError("Nie udało się zalogować");
       });
   }
   async updateUser(id: string, user: User): Promise<User> {

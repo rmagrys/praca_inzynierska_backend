@@ -8,7 +8,7 @@ export class UserDtoConverter {
     newUserDto.id = user.id ? user.id : 0;
     newUserDto.email = user.email;
     newUserDto.firstName = user.firstName;
-    newUserDto.lastName = user.firstName;
+    newUserDto.lastName = user.lastName;
     newUserDto.createdAt = user.createdAt;
     newUserDto.phone = user.phone;
     newUserDto.nickname = user.nickname;

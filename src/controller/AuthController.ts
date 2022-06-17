@@ -24,7 +24,7 @@ export class AuthController {
     return this.userService
       .authenticateUser(userCredentials.email, userCredentials.password)
       .catch(
-        () => new NotFoundError("User with this email or password not exist")
+        () => new NotFoundError("Użytkownik z danym e-mailem nie istnieje")
       );
   }
 }

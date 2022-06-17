@@ -2,15 +2,19 @@ import { AuctionType } from "../enum/AuctionType";
 import { ProductDto } from "./ProductDto";
 
 export class NewAuctionDto {
-  id: number;
-  price: number;
-  priceDrop: number;
+  //default fields
+  categoryId: string;
   imagesUrls: string[];
-  minimumPrice: number;
-  auctionType: AuctionType;
+  price: number;
   completionDate: Date;
   product: ProductDto;
-  intervalTime: Date;
-  createdAt: Date;
-  categoryId: string;
+  auctionType: AuctionType;
+
+  //auctions fields
+  jumpToNextRise: number;
+
+  //descending auction fields
+  minimumPrice: number;
+  priceDrop: number;
+  reducingTime: number;
 }

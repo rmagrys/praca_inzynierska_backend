@@ -23,6 +23,7 @@ export class AuctionService {
       .leftJoinAndSelect("auction.product", "product")
       .leftJoinAndSelect("auction.pictures", "picture")
       .leftJoinAndSelect("auction.bids", "bid")
+      .leftJoinAndSelect("bid.buyer", "buyer")
       .where("auction.id = :id", { id })
       .getOneOrFail();
   }
@@ -61,7 +62,10 @@ export class AuctionService {
     return this.auctionRepository.save(auciton);
   }
 
-  async getAllUserAuctionsWithIncludables(userId: string, auctionType: string) {
+  async getAllUserAuctionsWithIncludablesAndAcutionType(
+    userId: string,
+    auctionType: string
+  ) {
     return this.auctionRepository
       .createQueryBuilder()
       .select("auction")
@@ -72,6 +76,19 @@ export class AuctionService {
       .leftJoinAndSelect("auction.bids", "bid")
       .where("auction.user_id = :userId", { userId })
       .andWhere("auction.auctionType = :auctionType", { auctionType })
+      .getMany();
+  }
+
+  async getAllUserAuctionsWithIncludables(userId: string) {
+    return this.auctionRepository
+      .createQueryBuilder()
+      .select("auction")
+      .from(Auction, "auction")
+      .leftJoinAndSelect("auction.seller", "user")
+      .leftJoinAndSelect("auction.product", "product")
+      .leftJoinAndSelect("auction.pictures", "picture")
+      .leftJoinAndSelect("auction.bids", "bid")
+      .where("auction.user_id = :userId", { userId })
       .getMany();
   }
 

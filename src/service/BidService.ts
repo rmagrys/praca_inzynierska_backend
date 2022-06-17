@@ -1,6 +1,8 @@
 import { Service } from "typedi";
 import { InjectRepository } from "typeorm-typedi-extensions";
+import { Auction } from "../entity/Auction";
 import { Bid } from "../entity/Bid";
+import { User } from "../entity/User";
 import { AuctionType } from "../enum/AuctionType";
 import { BidRepository } from "../repository/BidRepository";
 
@@ -13,6 +15,19 @@ export class BidService {
   async saveNewBid(bid: Bid): Promise<Bid> {
     bid.createdAt = new Date();
     return this.bidRepository.save(bid);
+  }
+
+  async findBidByUserAndAuction(
+    userId: string,
+    auctionId: string
+  ): Promise<Bid> {
+    return this.bidRepository
+      .createQueryBuilder()
+      .select("bid")
+      .from(Bid, "bid")
+      .where("bid.auction_id = :auctionId", { auctionId })
+      .andWhere("bid.buyer_id = :userId", { userId })
+      .getOne();
   }
 
   async findHighestBidForAuction(auctionId: string): Promise<Bid> {
@@ -36,6 +51,7 @@ export class BidService {
       .from(Bid, "bid")
       .innerJoinAndSelect("bid.auction", "auction")
       .innerJoinAndSelect("auction.product", "product")
+      .innerJoinAndSelect("auction.pictures", "pucture")
       .where("product.category_id = :categoryId", { categoryId })
       .andWhere("bid.buyer_id = :userId", { userId })
       .andWhere("auction.auctionType = :auctionType", { auctionType })
@@ -48,6 +64,8 @@ export class BidService {
       .select("bid")
       .from(Bid, "bid")
       .leftJoinAndSelect("bid.auction", "auction")
+      .innerJoinAndSelect("auction.product", "product")
+      .innerJoinAndSelect("auction.pictures", "pucture")
       .where("bid.buyer_id = :userId", { userId })
       .getMany();
   }

@@ -31,14 +31,17 @@ export class Auction {
   @Column({ nullable: true })
   minimumPrice: number;
 
+  @Column({ nullable: true })
+  jumpToTheNextRaise: number;
+
   @Column()
   auctionType: AuctionType;
 
   @Column({ type: "timestamp", nullable: true })
   completionDate: Date;
 
-  @Column({ type: "timestamp", nullable: true })
-  intervalTime: Date;
+  @Column({ nullable: true })
+  reducingTime: number;
 
   @Column({ type: "timestamp" })
   createdAt: Date;

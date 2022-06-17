@@ -16,12 +16,9 @@ export class AuctionDtoConverter {
     newAuctionDto.minimumPrice = auction.minimumPrice;
     newAuctionDto.auctionType = auction.auctionType;
     newAuctionDto.completionDate = auction.completionDate;
-    newAuctionDto.intervalTime = auction.intervalTime;
+    newAuctionDto.reducingTime = auction.reducingTime;
     newAuctionDto.createdAt = auction.createdAt;
-    // newAuctionDto.seller = auction.seller;
-    // newAuctionDto.auctionsProducts = auction.auctionsProducts;
-    // newAuctionDto.bids = auction.bids;
-    // newAuctionDto.payment = auction.payment;
+    newAuctionDto.jumpToTheNextRaise = auction.jumpToTheNextRaise;
 
     return newAuctionDto;
   }
@@ -34,12 +31,9 @@ export class AuctionDtoConverter {
     newAuction.minimumPrice = auctionDto.minimumPrice;
     newAuction.auctionType = auctionDto.auctionType;
     newAuction.completionDate = auctionDto.completionDate;
-    newAuction.intervalTime = auctionDto.intervalTime;
+    newAuction.reducingTime = auctionDto.reducingTime;
     newAuction.createdAt = auctionDto.createdAt;
-    // newAuction.seller = auctionDto.seller;
-    // newAuction.auctionsProducts = auctionDto.auctionsProducts;
-    // newAuction.bids = auctionDto.bids;
-    // newAuction.payment = auctionDto.payment;
+    newAuction.jumpToTheNextRaise = auctionDto.jumpToTheNextRaise;
 
     return newAuction;
   }
@@ -54,10 +48,11 @@ export class AuctionDtoConverter {
       : 0;
     newAuction.auctionType = auctionDto.auctionType;
     newAuction.completionDate = auctionDto.completionDate;
-    newAuction.intervalTime = auctionDto.intervalTime
-      ? auctionDto.intervalTime
+    newAuction.reducingTime = auctionDto.reducingTime
+      ? auctionDto.reducingTime
       : null;
     newAuction.createdAt = auctionDto.createdAt;
+    newAuction.jumpToTheNextRaise = auctionDto.jumpToTheNextRaise;
     return newAuction;
   }
 
@@ -70,8 +65,10 @@ export class AuctionDtoConverter {
     newAuctionDto.minimumPrice = auction.minimumPrice;
     newAuctionDto.auctionType = auction.auctionType;
     newAuctionDto.completionDate = auction.completionDate;
-    newAuctionDto.intervalTime = auction.intervalTime;
+    newAuctionDto.reducingTime = auction.reducingTime;
     newAuctionDto.createdAt = auction.createdAt;
+    newAuctionDto.jumpToTheNextRaise = auction.jumpToTheNextRaise;
+
     newAuctionDto.seller = auction.seller
       ? UserDtoConverter.toDto(auction.seller)
       : null;
@@ -79,7 +76,7 @@ export class AuctionDtoConverter {
       ? ProductDtoConverter.toDto(auction.product)
       : null;
     newAuctionDto.bids = auction.bids
-      ? BidDtoConverter.bidsListToDtos(auction.bids)
+      ? BidDtoConverter.bidsListToDtosWithBuyers(auction.bids)
       : [];
     newAuctionDto.payment = auction.payment
       ? PaymentDtoConverter.toDto(auction.payment)

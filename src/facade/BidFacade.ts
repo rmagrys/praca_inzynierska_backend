@@ -1,3 +1,4 @@
+import { BadRequestError } from "routing-controllers";
 import { Service } from "typedi";
 import { Bid } from "../entity/Bid";
 import { AuctionService } from "../service/AuctionService";
@@ -12,32 +13,46 @@ export class BidFacade {
     private readonly auctionService: AuctionService
   ) {}
   async saveNewBid(bid: Bid, userId: string, auctionId: string): Promise<Bid> {
+    const auction = await this.auctionService.findOneAuction(auctionId);
+    if (auction.completionDate < new Date()) {
+      throw new BadRequestError("Nie można dodać, aukcja został zakończona");
+    }
+
     const highestBid = await this.bidService.findHighestBidForAuction(
       auctionId
     );
 
-    console.log("------------------------------------------");
-    console.log("------------------------------------------");
-    console.log("------------------------------------------");
-    console.log("highestBid", highestBid);
-    console.log("------------------------------------------");
-    console.log("------------------------------------------");
-    console.log("------------------------------------------");
-
-    if (highestBid && highestBid.value >= bid.value) {
-      throw new Error("cant add bid, there is auction with higher value");
+    if (auction.price >= bid.value) {
+      throw new BadRequestError(
+        "Nie można dodać, musisz podać cenę większą niż cena startowa"
+      );
     }
 
-    const auction = await this.auctionService.findOneAuction(auctionId);
-    if (auction.completionDate < new Date()) {
-      throw new Error("cant add bid, auction is finished");
+    if (
+      highestBid &&
+      highestBid.value + auction.jumpToTheNextRaise >= bid.value
+    ) {
+      throw new BadRequestError(
+        "Nie można dodać, musisz podać cenę większą niż największa oferta"
+      );
     }
+
+    const existingUserBid = await this.bidService.findBidByUserAndAuction(
+      userId,
+      auctionId
+    );
 
     const user = await this.userService.findOneUser(userId);
+    console.log(existingUserBid);
 
-    bid.auction = auction;
-    bid.buyer = user;
-
-    return this.bidService.saveNewBid(bid);
+    if (existingUserBid) {
+      existingUserBid.value = bid.value;
+      existingUserBid.description = bid.description;
+      return this.bidService.saveNewBid(existingUserBid);
+    } else {
+      bid.auction = auction;
+      bid.buyer = user;
+      return this.bidService.saveNewBid(bid);
+    }
   }
 }

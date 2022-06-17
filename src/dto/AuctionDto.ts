@@ -11,15 +11,16 @@ export class AuctionDto {
   price: number;
   priceDrop: number;
   minimumPrice: number;
+  jumpToTheNextRaise: number;
   auctionType: AuctionType;
   completionDate: Date;
-  intervalTime: Date;
+  reducingTime: number;
   createdAt: Date;
   seller?: UserDto;
-  product: ProductDto;
+  product?: ProductDto;
   bids?: BidDto[];
-  payment?: PaymentDto;
   pictures?: PictureDto[];
+  payment?: PaymentDto;
 
   async validate() {
     await validateOrReject(this);

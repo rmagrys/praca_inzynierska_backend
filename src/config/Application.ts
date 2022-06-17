@@ -34,7 +34,7 @@ export class Application {
         const app = createExpressServer({
           controllers: [__dirname + "./../controller/*.ts"],
           middlewares: [__dirname + "./../middleware/*.ts"],
-          defaultErrorHandler: false,
+          defaultErrorHandler: true,
           authorizationChecker: async (action: Action) => {
             const userFromToken: User =
               await SecurityChecker.findUserFromAction(action, connection);

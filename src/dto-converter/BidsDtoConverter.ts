@@ -38,8 +38,20 @@ export class BidDtoConverter {
     bidDto.createdAt = bid.createdAt;
     bidDto.buyer = bid.buyer ? UserDtoConverter.toDto(bid.buyer) : null;
     bidDto.auction = bid.auction
-      ? AuctionDtoConverter.toDto(bid.auction)
+      ? AuctionDtoConverter.toDtoWithIncludables(bid.auction)
       : null;
+
+    return bidDto;
+  }
+
+  public static toDtoWithBuyers(bid: Bid): BidDto {
+    const bidDto = new BidDto();
+
+    bidDto.id = bid.id ? bid.id : 0;
+    bidDto.value = bid.value;
+    bidDto.description = bid.description;
+    bidDto.createdAt = bid.createdAt;
+    bidDto.buyer = bid.buyer ? UserDtoConverter.toDto(bid.buyer) : null;
 
     return bidDto;
   }
@@ -50,5 +62,9 @@ export class BidDtoConverter {
 
   public static bidsListToDtosWithIncludables(bids: Bid[]): BidDto[] {
     return bids.map((bid) => this.toDtoWithIncludables(bid));
+  }
+
+  public static bidsListToDtosWithBuyers(bids: Bid[]): BidDto[] {
+    return bids.map((bid) => this.toDtoWithBuyers(bid));
   }
 }

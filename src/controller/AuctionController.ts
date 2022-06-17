@@ -46,7 +46,7 @@ export class AuctionController {
   }
 
   @Get("/:id")
-  public async getAyctionById(@Param("id") id: string): Promise<AuctionDto> {
+  public async getAuctionById(@Param("id") id: string): Promise<AuctionDto> {
     return this.auctionService
       .getAuctionByIdWithIncludables(id)
       .then((auction: Auction) =>
@@ -69,11 +69,24 @@ export class AuctionController {
 
   @Get("/user/:id")
   public async getAllUserAuctionsWithIncludables(
+    @Param("id") userId: string
+  ): Promise<AuctionDto[]> {
+    return await this.auctionService
+      .getAllUserAuctionsWithIncludables(userId)
+      .then((auctions: Auction[]) =>
+        AuctionDtoConverter.auctionsListToDtosWithIncludables(auctions)
+      );
+  }
+
+  @Get("/user/:id")
+  public async getAllUserAuctionsWithIncludablesByAuctionType(
     @Param("id") userId: string,
     @QueryParam("auction-type") auctionType?: AuctionType
   ): Promise<AuctionDto[]> {
+    console.log("here");
+
     return await this.auctionService
-      .getAllUserAuctionsWithIncludables(userId, auctionType)
+      .getAllUserAuctionsWithIncludablesAndAcutionType(userId, auctionType)
       .then((auctions: Auction[]) =>
         AuctionDtoConverter.auctionsListToDtosWithIncludables(auctions)
       );

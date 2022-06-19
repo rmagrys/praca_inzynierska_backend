@@ -17,7 +17,7 @@ export class SecurityChecker {
     connection: Connection
   ): Promise<User> {
     const applicationSecret: string = config.get("security.secret");
-    const authorizationHeader: string = action.request.header.authorization;
+    const authorizationHeader: string = action.request.headers["authorization"];
 
     try {
       const token = authorizationHeader.replace("Bearer ", "");

@@ -13,6 +13,9 @@ import { NewAuctionDto } from "../dto/NewAuctionDto";
 import { ProductDtoConverter } from "../dto-converter/ProductDtoConverter";
 import { Picture } from "../entity/Picture";
 import { PictureRepository } from "../repository/PictureRepository";
+import { Payment } from "../entity/Payment";
+import { BadRequestError, NotFoundError } from "routing-controllers";
+import { Auction } from "../entity/Auction";
 
 @Service()
 export class AuctionFacade {
@@ -51,7 +54,33 @@ export class AuctionFacade {
 
       return this.auctionRepository.save(auctionEntity);
     } catch (error) {
-      console.log(error);
+      throw new BadRequestError(error);
     }
+  }
+
+  async handlePayment(
+    payment: Payment,
+    auctionId: string,
+    userId: string
+  ): Promise<Auction> {
+    const user = await this.userService.findOneUser(userId);
+    const auction = await this.auctionRepository.findOne(auctionId);
+
+    if (!user) {
+      throw new NotFoundError("Nie ma takiego użytkownika");
+    }
+
+    if (!auction) {
+      throw new NotFoundError("Nie ma takiej aukcji");
+    }
+
+    payment.createdAt = new Date();
+    payment.auction = auction;
+    payment.buyer = user;
+
+    auction.payment = payment;
+    auction.completionDate = new Date();
+
+    return this.auctionRepository.save(auction);
   }
 }

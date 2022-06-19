@@ -68,7 +68,9 @@ export class Auction {
   })
   pictures?: Picture[];
 
-  @OneToOne(() => Payment, (payment) => payment.auction)
+  @OneToOne(() => Payment, (payment) => payment.auction, {
+    cascade: true,
+  })
   @JoinColumn({ name: "payment_id" })
   payment?: Payment;
 

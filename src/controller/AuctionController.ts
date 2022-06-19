@@ -6,6 +6,7 @@ import {
   HttpCode,
   Body,
   QueryParam,
+  Authorized,
 } from "routing-controllers";
 import { Service } from "typedi";
 import { AuctionDtoConverter } from "../dto-converter/AuctionDtoConverter";
@@ -15,6 +16,9 @@ import { Auction } from "../entity/Auction";
 import { AuctionService } from "../service/AuctionService";
 import { AuctionFacade } from "../facade/AuctionFacade";
 import { AuctionType } from "../enum/AuctionType";
+import { PaymentDto } from "../dto/PaymentDto";
+import { PaymentDtoConverter } from "../dto-converter/PaymentDtoConverter";
+import { Payment } from "../entity/Payment";
 
 @Service()
 @JsonController("/api/auction")
@@ -25,6 +29,7 @@ export class AuctionController {
   ) {}
 
   @Get()
+  @Authorized()
   public async getAllAuctionsWithIncludables(): Promise<AuctionDto[]> {
     return this.auctionService
       .getAllAuctionsWithIncludables()
@@ -34,6 +39,7 @@ export class AuctionController {
   }
 
   @Get("/category-id/:id")
+  @Authorized()
   public async getAllFilteredAuctionsWithIncludables(
     @Param("id") categoryId: string,
     @QueryParam("auction-type") auctionType?: AuctionType
@@ -46,6 +52,7 @@ export class AuctionController {
   }
 
   @Get("/:id")
+  @Authorized()
   public async getAuctionById(@Param("id") id: string): Promise<AuctionDto> {
     return this.auctionService
       .getAuctionByIdWithIncludables(id)
@@ -56,18 +63,18 @@ export class AuctionController {
 
   @Post("/user/:id")
   @HttpCode(201)
+  @Authorized()
   public async addNewAuction(
     @Body({ validate: true }) newAuctionDto: NewAuctionDto,
     @Param("id") id: string
   ): Promise<AuctionDto> {
-    console.log(newAuctionDto);
-
     return await this.auctionFacade
       .addNewAuction(newAuctionDto, id)
       .then((auction: Auction) => AuctionDtoConverter.toDto(auction));
   }
 
   @Get("/user/:id")
+  @Authorized()
   public async getAllUserAuctionsWithIncludables(
     @Param("id") userId: string
   ): Promise<AuctionDto[]> {
@@ -79,6 +86,7 @@ export class AuctionController {
   }
 
   @Get("/user/:id")
+  @Authorized()
   public async getAllUserAuctionsWithIncludablesByAuctionType(
     @Param("id") userId: string,
     @QueryParam("auction-type") auctionType?: AuctionType
@@ -93,6 +101,7 @@ export class AuctionController {
   }
 
   @Get("/category/:categoryId/user/:userId")
+  @Authorized()
   public async getAllUserAuctionsWithIncludablesByCategory(
     @Param("categoryId") categoryId: string,
     @Param("userId") userId: string,
@@ -106,6 +115,21 @@ export class AuctionController {
       )
       .then((auctions: Auction[]) =>
         AuctionDtoConverter.auctionsListToDtosWithIncludables(auctions)
+      );
+  }
+
+  @Post("/:auctionId/user/:userId/payment")
+  @Authorized()
+  public async confirmPaymentForAuction(
+    @Param("auctionId") auctionId: string,
+    @Param("userId") userId: string,
+    @Body({ validate: true }) paymentDto: PaymentDto
+  ): Promise<AuctionDto> {
+    const newPayment = PaymentDtoConverter.toEntity(paymentDto);
+    return this.auctionFacade
+      .handlePayment(newPayment, auctionId, userId)
+      .then((auction: Auction) =>
+        AuctionDtoConverter.toDtoWithIncludables(auction)
       );
   }
 }

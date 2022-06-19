@@ -38,12 +38,13 @@ export class Application {
           authorizationChecker: async (action: Action) => {
             const userFromToken: User =
               await SecurityChecker.findUserFromAction(action, connection);
-            action.context.state.actionUser = userFromToken;
+            console.log(action);
+            action.request.actionUser = userFromToken;
             return userFromToken ? !!userFromToken : false;
           },
           currentUserChecker: async (action: Action) => {
-            return action.context.state.actionUser
-              ? action.context.state.actionUser
+            return action.request.actionUser
+              ? action.request.actionUser
               : await SecurityChecker.findUserFromAction(action, connection);
           },
           cors: {

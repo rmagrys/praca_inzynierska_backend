@@ -23,6 +23,8 @@ export class AuctionService {
       .leftJoinAndSelect("auction.product", "product")
       .leftJoinAndSelect("auction.pictures", "picture")
       .leftJoinAndSelect("auction.bids", "bid")
+      .leftJoinAndSelect("auction.payment", "payment")
+      .leftJoinAndSelect("payment.buyer", "auctionBuyer")
       .leftJoinAndSelect("bid.buyer", "buyer")
       .where("auction.id = :id", { id })
       .getOneOrFail();
@@ -36,7 +38,10 @@ export class AuctionService {
       .leftJoinAndSelect("auction.seller", "user")
       .leftJoinAndSelect("auction.product", "product")
       .leftJoinAndSelect("auction.pictures", "picture")
+      .leftJoinAndSelect("auction.payment", "payment")
       .leftJoinAndSelect("auction.bids", "bid")
+      .where("auction.payment is null")
+      .andWhere("auction.completionDate > :now", { now: new Date() })
       .getMany();
   }
 
@@ -52,8 +57,10 @@ export class AuctionService {
       .leftJoinAndSelect("auction.product", "product")
       .leftJoinAndSelect("auction.pictures", "picture")
       .leftJoinAndSelect("auction.bids", "bid")
+      .leftJoinAndSelect("auction.payment", "payment")
       .where("product.category_id = :categoryId", { categoryId })
       .andWhere("auction.auctionType = :auctionType", { auctionType })
+      .andWhere("auction.completionDate < :now", { now: new Date() })
       .getMany();
   }
 
@@ -73,6 +80,7 @@ export class AuctionService {
       .leftJoinAndSelect("auction.seller", "user")
       .leftJoinAndSelect("auction.product", "product")
       .leftJoinAndSelect("auction.pictures", "picture")
+      .leftJoinAndSelect("auction.payment", "payment")
       .leftJoinAndSelect("auction.bids", "bid")
       .where("auction.user_id = :userId", { userId })
       .andWhere("auction.auctionType = :auctionType", { auctionType })
@@ -87,6 +95,7 @@ export class AuctionService {
       .leftJoinAndSelect("auction.seller", "user")
       .leftJoinAndSelect("auction.product", "product")
       .leftJoinAndSelect("auction.pictures", "picture")
+      .leftJoinAndSelect("auction.payment", "payment")
       .leftJoinAndSelect("auction.bids", "bid")
       .where("auction.user_id = :userId", { userId })
       .getMany();
@@ -104,6 +113,7 @@ export class AuctionService {
       .leftJoinAndSelect("auction.seller", "user")
       .leftJoinAndSelect("auction.product", "product")
       .leftJoinAndSelect("auction.pictures", "picture")
+      .leftJoinAndSelect("auction.payment", "payment")
       .leftJoinAndSelect("auction.bids", "bid")
       .where("auction.user_id = :userId", { userId })
       .andWhere("product.category_id = :categoryId", { categoryId })

@@ -36,7 +36,6 @@ export class CategoryController {
   public async addNewCategory(
     @Body({ validate: true }) categoryDto: CategoryDto
   ): Promise<CategoryDto> {
-    console.log(categoryDto);
     const category: Category = CategoryDtoConverter.toEntity(categoryDto);
 
     return await this.categoryService

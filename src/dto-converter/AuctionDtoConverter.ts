@@ -79,7 +79,7 @@ export class AuctionDtoConverter {
       ? BidDtoConverter.bidsListToDtosWithBuyers(auction.bids)
       : [];
     newAuctionDto.payment = auction.payment
-      ? PaymentDtoConverter.toDto(auction.payment)
+      ? PaymentDtoConverter.toDtoWithIncludables(auction.payment)
       : null;
     newAuctionDto.pictures = auction.pictures
       ? PictureDtoConverter.picturesListToDtos(auction.pictures)

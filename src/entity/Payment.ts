@@ -18,7 +18,6 @@ export class Payment {
   id: number;
 
   @Column()
-  @Length(2, 50)
   value: number;
 
   @Column()
@@ -34,7 +33,7 @@ export class Payment {
   @JoinColumn({ name: "buyer_id" })
   buyer?: User;
 
-  @OneToOne(() => Auction, (auction) => auction.payment) // specify inverse side as a second parameter
+  @OneToOne(() => Auction, (auction) => auction.payment)
   @JoinColumn({ name: "auction_id" })
   auction?: Auction;
 

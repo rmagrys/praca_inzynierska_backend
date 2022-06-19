@@ -1,5 +1,6 @@
 import { PaymentDto } from "../dto/PaymentDto";
 import { Payment } from "../entity/Payment";
+import { UserDtoConverter } from "./UserDtoConverter";
 
 export class PaymentDtoConverter {
   public static toDto(payment: Payment): PaymentDto {
@@ -9,7 +10,6 @@ export class PaymentDtoConverter {
     newPaymentDto.value = payment.value;
     newPaymentDto.description = payment.description;
     newPaymentDto.createdAt = payment.createdAt;
-    // newPaymentDto.buyer = payment.buyer;
 
     return newPaymentDto;
   }
@@ -23,6 +23,16 @@ export class PaymentDtoConverter {
     // newPayment.buyer = paymentDto.buyer;
 
     return newPayment;
+  }
+
+  public static toDtoWithIncludables(payment: Payment): PaymentDto {
+    const newPaymentDto = this.toDto(payment);
+
+    newPaymentDto.buyer = payment.buyer
+      ? UserDtoConverter.toDto(payment.buyer)
+      : null;
+
+    return newPaymentDto;
   }
 
   public static paymentsListToDtos(payments: Payment[]): PaymentDto[] {

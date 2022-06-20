@@ -21,7 +21,7 @@ export class UserDtoConverter {
 
     newUser.email = userDto.email;
     newUser.firstName = userDto.firstName;
-    newUser.lastName = userDto.firstName;
+    newUser.lastName = userDto.lastName;
     newUser.createdAt = userDto.createdAt;
     newUser.phone = userDto.phone;
     newUser.password = userDto.password;

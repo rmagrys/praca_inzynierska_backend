@@ -5,6 +5,7 @@ import {
   Post,
   HttpCode,
   Body,
+  Authorized,
 } from "routing-controllers";
 import { Service } from "typedi";
 import { CategoryDtoConverter } from "../dto-converter/CategoryDtoConverter";
@@ -18,6 +19,7 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
+  @Authorized()
   public async getAllCategories() {
     return this.categoryService
       .getAllCategories()
@@ -25,6 +27,7 @@ export class CategoryController {
   }
 
   @Get("/:id")
+  @Authorized()
   public async getCategoryById(@Param("id") id: string): Promise<CategoryDto> {
     return this.categoryService
       .getCategoryById(id)
@@ -32,6 +35,7 @@ export class CategoryController {
   }
 
   @Post()
+  @Authorized()
   @HttpCode(201)
   public async addNewCategory(
     @Body({ validate: true }) categoryDto: CategoryDto

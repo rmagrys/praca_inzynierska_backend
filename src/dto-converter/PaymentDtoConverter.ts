@@ -20,7 +20,6 @@ export class PaymentDtoConverter {
     newPayment.value = paymentDto.value;
     newPayment.description = paymentDto.description;
     newPayment.createdAt = paymentDto.createdAt;
-    // newPayment.buyer = paymentDto.buyer;
 
     return newPayment;
   }

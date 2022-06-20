@@ -38,7 +38,6 @@ export class Application {
           authorizationChecker: async (action: Action) => {
             const userFromToken: User =
               await SecurityChecker.findUserFromAction(action, connection);
-            console.log(action);
             action.request.actionUser = userFromToken;
             return userFromToken ? !!userFromToken : false;
           },

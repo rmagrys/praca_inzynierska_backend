@@ -22,7 +22,7 @@ export class Product {
   name: string;
 
   @Column()
-  @Length(2, 50)
+  @Length(2, 500)
   description: string;
 
   @Column({ type: "timestamp" })

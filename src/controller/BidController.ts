@@ -1,4 +1,5 @@
 import {
+  Authorized,
   Body,
   Get,
   JsonController,
@@ -22,10 +23,12 @@ export class BidController {
     private readonly bidFacade: BidFacade
   ) {}
 
+  @Authorized()
   @Get("/user/:userId")
   async getAllUserBidsWithIncludables(
     @Param("userId") userId: string
   ): Promise<Bid[]> {
+    console.log("userId", userId);
     return await this.bidService
       .getAllUserBidsWithIncludables(userId)
       .then((bids: Bid[]) =>
@@ -33,6 +36,7 @@ export class BidController {
       );
   }
 
+  @Authorized()
   @Get("/user/:userId/category/:categoryId")
   async getAllUserBidsWithIncludablesByCategoryAndAuctionType(
     @Param("userId") userId: string,
@@ -50,6 +54,7 @@ export class BidController {
       );
   }
 
+  @Authorized()
   @Post("/user/:userId/auction/:auctionId")
   async addNewBidToAuction(
     @Param("userId") userId: string,

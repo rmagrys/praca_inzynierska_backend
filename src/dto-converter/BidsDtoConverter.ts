@@ -23,8 +23,6 @@ export class BidDtoConverter {
     newBid.value = bidDto.value;
     newBid.description = bidDto.description;
     newBid.createdAt = bidDto.createdAt;
-    // newBid.buyer = bidDto.buyer;
-    // newBid.auction = bidDto.auction;
 
     return newBid;
   }

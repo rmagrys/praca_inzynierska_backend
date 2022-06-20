@@ -49,9 +49,9 @@ export class BidService {
       .createQueryBuilder()
       .select("bid")
       .from(Bid, "bid")
-      .innerJoinAndSelect("bid.auction", "auction")
-      .innerJoinAndSelect("auction.product", "product")
-      .innerJoinAndSelect("auction.pictures", "pucture")
+      .leftJoinAndSelect("bid.auction", "auction")
+      .leftJoinAndSelect("auction.product", "product")
+      .leftJoinAndSelect("auction.pictures", "pucture")
       .where("product.category_id = :categoryId", { categoryId })
       .andWhere("bid.buyer_id = :userId", { userId })
       .andWhere("auction.auctionType = :auctionType", { auctionType })
@@ -64,8 +64,8 @@ export class BidService {
       .select("bid")
       .from(Bid, "bid")
       .leftJoinAndSelect("bid.auction", "auction")
-      .innerJoinAndSelect("auction.product", "product")
-      .innerJoinAndSelect("auction.pictures", "pucture")
+      .leftJoinAndSelect("auction.product", "product")
+      .leftJoinAndSelect("auction.pictures", "pucture")
       .where("bid.buyer_id = :userId", { userId })
       .getMany();
   }

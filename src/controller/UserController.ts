@@ -1,11 +1,22 @@
-import {Body, Delete, Get, HttpCode, JsonController, NotFoundError, Param, Patch, Post,} from "routing-controllers";
-import {Service} from "typedi";
-import {DeleteResult} from "typeorm";
+import {
+  Authorized,
+  Body,
+  Delete,
+  Get,
+  HttpCode,
+  JsonController,
+  NotFoundError,
+  Param,
+  Patch,
+  Post,
+} from "routing-controllers";
+import { Service } from "typedi";
+import { DeleteResult } from "typeorm";
 import { AuctionDtoConverter } from "../dto-converter/AuctionDtoConverter";
-import {UserDtoConverter} from "../dto-converter/UserDtoConverter";
-import {UserDto} from "../dto/UserDto";
-import {User} from "../entity/User";
-import {UserService} from "../service/UserService";
+import { UserDtoConverter } from "../dto-converter/UserDtoConverter";
+import { UserDto } from "../dto/UserDto";
+import { User } from "../entity/User";
+import { UserService } from "../service/UserService";
 
 @Service()
 @JsonController("/api/users")
@@ -13,6 +24,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @Authorized()
   public async getAllUsers(): Promise<UserDto[]> {
     return await this.userService
       .getAllUsers()
@@ -20,6 +32,7 @@ export class UserController {
   }
 
   @Get("/:id")
+  @Authorized()
   public async getUserById(@Param("id") id: string): Promise<UserDto> {
     return await this.userService
       .findOneUser(id)
@@ -35,13 +48,14 @@ export class UserController {
     @Body({ validate: true }) userDto: UserDto
   ): Promise<UserDto> {
     const user: User = UserDtoConverter.toEntity(userDto);
-    
+
     return await this.userService
       .saveUser(user)
       .then((user: User) => UserDtoConverter.toDto(user));
   }
 
   @Patch("/:id")
+  @Authorized()
   @HttpCode(200)
   public async updateUser(
     @Param("id") id: string,
@@ -55,6 +69,7 @@ export class UserController {
   }
 
   @Delete("/:id")
+  @Authorized()
   @HttpCode(204)
   public async deleteUser(@Param("id") id: string): Promise<DeleteResult> {
     return await this.userService.deleteUser(id).catch(() => {

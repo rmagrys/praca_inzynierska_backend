@@ -1,20 +1,17 @@
+import { BadRequestError, NotFoundError } from "routing-controllers";
 import { Service } from "typedi";
+
 import { InjectRepository } from "typeorm-typedi-extensions";
 import { CategoryService } from "../service/CategoryService";
 import { UserService } from "../service/UserService";
 import { ProductService } from "../service/ProductService";
 import { AuctionRepository } from "../repository/AuctionRepository";
-import { CategoryDtoConverter } from "../dto-converter/CategoryDtoConverter";
 import { AuctionDtoConverter } from "../dto-converter/AuctionDtoConverter";
-
-import { AuctionDto } from "../dto/AuctionDto";
-import { Product } from "../entity/Product";
 import { NewAuctionDto } from "../dto/NewAuctionDto";
 import { ProductDtoConverter } from "../dto-converter/ProductDtoConverter";
 import { Picture } from "../entity/Picture";
 import { PictureRepository } from "../repository/PictureRepository";
 import { Payment } from "../entity/Payment";
-import { BadRequestError, NotFoundError } from "routing-controllers";
 import { Auction } from "../entity/Auction";
 
 @Service()

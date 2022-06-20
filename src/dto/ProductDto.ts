@@ -9,7 +9,7 @@ export class ProductDto {
   @Length(2, 50)
   name: string;
 
-  @Length(2, 50)
+  @Length(2, 500)
   description: string;
 
   createdAt: Date;

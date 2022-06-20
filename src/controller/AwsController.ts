@@ -5,6 +5,7 @@ import {
   HttpCode,
   Body,
   QueryParam,
+  Authorized,
 } from "routing-controllers";
 import { Service } from "typedi";
 import * as S3 from "aws-sdk/clients/s3";
@@ -24,6 +25,7 @@ export class AwsController {
   s3 = new S3({ ...config });
 
   @Post()
+  @Authorized()
   @HttpCode(200)
   public async getUploadLink(@Body() fileData: FileAwsInput): Promise<string> {
     const { type, name } = fileData;

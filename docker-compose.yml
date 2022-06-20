@@ -5,7 +5,9 @@ services:
     image: mysql
     container_name: mysql-db
     restart: always
-    command: --default-authentication-plugin=mysql_native_password
+    command: 
+      - --default-authentication-plugin=mysql_native_password
+      - --init-file /data/application/init.sql
     environment:
       MYSQL_USER: 'user'
       MYSQL_PASSWORD: 'password'
@@ -13,6 +15,8 @@ services:
       MYSQL_ROOT_PASSWORD: 'root'
     ports: 
       - 3306:3306
+    volumes:
+       - .db/init.sql:/data/application/init.sql
 
   adminer:
     image: adminer
